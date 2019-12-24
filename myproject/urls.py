@@ -28,6 +28,8 @@ urlpatterns = [
     path("signup/", accounts_views.signup, name="signup"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),
+    path("boards/<int:pk>/topics/<int:topic_pk>/", views.topic_posts, name="topic_posts"),
+    path("boards/<int:pk>/topics/<int:topic_pk>/reply", views.reply_topic, name="reply_topic"),
     path("reset/", auth_views.PasswordResetView.as_view(
         template_name="password_reset.html",
         email_template_name="password_reset_email.html",
