@@ -24,7 +24,7 @@ class BoardTopicsTests(TestCase):
         self.assertEqual(view.func, views.board_topics)
 
     def test_board_topics_view_contains_navigation_links(self):
-        home_url = reverse(views.home)
+        home_url = reverse("home")
         new_topic_url = reverse(views.new_topic, kwargs={"pk": self.board.pk})
         self.assertContains(self.response, 'href="{0}"'.format(home_url))
         self.assertContains(self.response, 'href="{0}"'.format(new_topic_url))

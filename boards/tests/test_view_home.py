@@ -8,7 +8,7 @@ from ..models import Board
 class HomeTests(TestCase):
     def setUp(self):
         self.board = Board.objects.create(name="Django", description="Board about Django...")
-        url = reverse(views.home)
+        url = reverse("home")
         self.response = self.client.get(url)
 
     def test_home_view_status_code(self):
@@ -16,7 +16,7 @@ class HomeTests(TestCase):
 
     def test_home_url_resolves_home_views(self):
         view = resolve("/")
-        self.assertEqual(view.func, views.home)
+        self.assertEqual(view.func.view_class, views.BoardListView)
 
     def test_home_view_contains_link_to_topics_page(self):
         board_topics_url = reverse(views.board_topics, kwargs={"pk": self.board.pk})
