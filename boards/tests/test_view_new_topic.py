@@ -12,7 +12,7 @@ class NewTopicTests(TestCase):
         self.board = Board.objects.create(name="Test board", description="This is test board")
         self.user = User.objects.create_user(username="Test", email="test@gmail.com", password="123")
         self.client.login(username="Test", password="123")
-        url = reverse(views.new_topic, kwargs={"pk": 1})
+        url = reverse("new_topic", kwargs={"pk": 1})
         self.response = self.client.get(url)
 
     def test_contains_form(self):
@@ -23,7 +23,7 @@ class NewTopicTests(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_new_topic_view_not_found_status_code(self):
-        url = reverse(views.new_topic, kwargs={"pk": 99})
+        url = reverse("new_topic", kwargs={"pk": 99})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
@@ -32,14 +32,14 @@ class NewTopicTests(TestCase):
         self.assertEqual(view.func, views.new_topic)
 
     def test_new_topic_view_contains_link_to_board(self):
-        board_topic_url = reverse(views.board_topics, kwargs={"pk": self.board.pk})
+        board_topic_url = reverse("board_topics", kwargs={"pk": self.board.pk})
         self.assertContains(self.response, 'href="{0}"'.format(board_topic_url))
 
     def test_csrf(self):
         self.assertContains(self.response, "csrfmiddlewaretoken")
 
     def test_new_topic_valid_post_data(self):
-        url = reverse(views.new_topic, kwargs={"pk": 1})
+        url = reverse("new_topic", kwargs={"pk": 1})
         data = {
             "subject": "Test subject",
             "message": "Test message"
@@ -49,12 +49,12 @@ class NewTopicTests(TestCase):
         self.assertTrue(Post.objects.exists())
 
     def test_new_topic_invalid_data(self):
-        url = reverse(views.new_topic, kwargs={"pk": 1})
+        url = reverse("new_topic", kwargs={"pk": 1})
         response = self.client.post(url, {})
         self.assertEquals(response.status_code, 200)
 
     def test_new_topic_empty_data(self):
-        url = reverse(views.new_topic, kwargs={"pk": 1})
+        url = reverse("new_topic", kwargs={"pk": 1})
         response = self.client.post(url, {})
         form = response.context.get("form")
         self.assertEqual(response.status_code, 200)
